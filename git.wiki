@@ -54,4 +54,6 @@ fatal: unable to auto-detect email address
 `git diff`
 git diff顾名思义就是查看difference，显示的格式正是Unix通用的diff格式
 `git log -1`可以快速浏览提交留言,这里的数字用来限制git log 命令输出的提交条目的个数,加上 --pretty=oneline参数每条记录显示(版本号和提交留言)一行。
+== 添加新的远程版本库 ==
+
 

@@ -1,0 +1,44 @@
+ = Linux下YouCompleteMe插件安装与配置 =
+%toc 目录
+== 编译安装llvm-clang3.3 ==
+YouCompleteMe要求Vim版本7.3.584+,前面已经介绍了编译安装Vim7.4方法。
+同时YouCompleteMe要求clang版本为3.3以上。如果想获取最新的clang可以使用SVN,按照其官网上介绍的[[http://clang.llvm.org/get_started.html| 方法]]编译安装。我们这里介绍源码编译安装clang3.3。
+
+先下载如下4个源码：
+[[http://llvm.org/releases/3.3/llvm-3.3.src.tar.gz| llvm-3.3源码]]
+[[http://llvm.org/releases/3.3/cfe-3.3.src.tar.gz| clang-3.3源码]]
+[[http://llvm.org/releases/3.3/clang-tools-extra-3.3.src.tar.gz| clang-tools-extra-3.3源码]]
+[[http://llvm.org/releases/3.3/compiler-rt-3.3.src.tar.gz| compiler-rt-3.3源码]]
+建立目录：`mkdir ~/llvm-clang`
+分别解压上面下载的4个文件到上述目录
+`tar -xvzf llvm-3.3.src.tar.gz`
+`tar -xvzf compiler-rt-3.3.src.tar.gz `
+`tar -xvzf clang-tools-extra-3.3.src.tar.gz`
+`tar -xvzf cfe-3.3.src.tar.gz`
+再将工具移动到llvm的相应目录下,使得clang，clang-tools-extra和compiler-rt就可以和llvm一起编译了：
+`mv cfe-3.3.src/ llvm-3.3.src/tools/clang/`
+`mv clang-tools-extra-3.3.src/ llvm-3.3.src/tools/clang/extra/`
+`mv compiler-rt-3.3.src/ llvm-3.3.src/projects/compiler-rt/`
+返回~/llvm-clang目录，并新建一个目录llvm-build专门用于编译llvm-clang，使得不污染源码。
+`mkdir llvm-build`
+`cd llvm-build/`
+`../llvm-3.3.src/configure --enable-optimized` 建立编译环境
+此种配置后，llv-clang默认安装到目录 /usr/local/ 下， 如果想改变安装目录，则加上配置： --prefix=Path 来制定
+输入 `make -j4` （本人机器为双核）开始编译
+`sudo make install`进行安装
+如要卸载则在该目录下输入 `sudo make uninstall`
+安装好后，输入 `clang -v`查看版本信息：
+== 安装配置YouCompleteMe ==
+# 下载源码。使用vundle搞定，在vimrc文件中加入 `Bundle 'Valloric/YouCompleteMe'`
+# 执行命令：
+  {{{
+    $ cd ~
+    $ mkdir ~/ycm_build
+    $ cd ~/ycm_build
+    $ cmake -G "Unix Makefiles" -DEXTERNAL_LIBCLANG_PATH=CLANG_INSTALL_PATH/libclang.so . ~/.vim/bundle/YouCompleteMe/cpp
+  }}}
+# 在YouCompleteMe中生成libclang.so和ycm_core.so文件
+    执行 `make ycm_core`，这样将在~/.vim/bundle/YouCompleteMe/python/目录下自动生成两个文件(libclang.so和ycm_core.so)
+# 这还是不够的，还必须执行命令：`make ycm_support_libs`。 这条命令才会生成第三个文件ycm_client_support.so。因为，YouCompleteMe是C/S架构的，所以存在服务器和服务端的说法。
+# 最后设置`.ycm_extra_conf.py`文件。
+

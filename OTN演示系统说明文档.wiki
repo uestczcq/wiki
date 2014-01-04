@@ -1,0 +1,141 @@
+ = OTN演示系统说明文档 =
+ %toc 目录
+== 下行说明 ==
+代码及脚本在demo_downstreamv6.2.tar.gz中
+ # 解压到～/demo_downstream目录下
+   - `mkdir ~/demo_downstream`
+   - `tar -xvzf demo_downstreamv6.2.tar.gz -C ~/demo_downstream`
+ # 执行初始化脚本
+   - 进入脚本所在目录`cd ~/demo_downstream/shell`
+   - `sudo ./init_upmoduls` (如脚本无法执行则运行`chmod +x init_upmoduls`再运行)
+   - `exit`
+   - 重新初始化下行系统`sudo ./reinitmoduls.sh`(如脚本无法执行则运行`chmod +x reinitmoduls.sh`再运行)
+ # 运行Host程序
+   - 进入程序所在目录`cd ~/demo_downstream/downstream`
+   - 运行`sudo ./rs_decode`
+ # 如要停止运行则运行～/demo_downstream/shll目录下的`sudo ./stop_otn`
+ # 如要再次运行请
+   - 先执行~/demo_downstream/shll目录下的`sudo ./reinitmoduls`脚本
+   - 再执行~/demo_downstream/downstream目录下的`sudo ./rs_decode`
+ # 如要查看帧数据则运行～/demo_downstream/shll目录下的`sudo ./coutinfo.sh`
+----
+==== 下行子系统源码及脚本目录树 ====
+ {{{
+
+    ├── downstream // Host及主控程序文件夹
+    │   ├── debug_fs.h
+    │   ├── Makefile
+    │   ├── modules.order
+    │   ├── Module.symvers
+    │   ├── otn_main_ctl_down.c
+    │   ├── otn_main_ctl_down.ko //主控模块
+    │   ├── otn_main_ctl_down.mod.c
+    │   ├── otn_main_ctl_down.mod.o
+    │   ├── otn_main_ctl_down.o
+    │   ├── otn_main_ctl.h
+    │   ├── rs_decode   // Host程序
+    │   ├── rs_decode.cpp
+    │   ├── rs_decode_Kernel.cl
+    │   └── rs_decode.o
+    ├── gfp_down    // GFP映射模块文件夹
+    │   ├── gfp_down.c
+    │   ├── gfp_down.h
+    │   ├── gfp_down.ko //GFP模块文件
+    │   ├── gfp_down.mod.c
+    │   ├── gfp_down.mod.o
+    │   ├── gfp_down.o
+    │   ├── Makefile
+    │   ├── modules.order
+    │   └── Module.symvers
+    ├── otn_card_dfs    // 光卡DMA控制模块程序所在文件夹
+    │   ├── Makefile
+    │   ├── modules.order
+    │   ├── Module.symvers
+    │   ├── otn_card.c
+    │   ├── otn_card.h
+    │   ├── otn_card.ko //光卡DMA控制模块文件
+    │   ├── otn_card.mod.c
+    │   ├── otn_card.mod.o
+    │   └── otn_card.o
+    ├── readme.txt // 版本说明文档
+    └── shell   // shell脚本文件夹
+        ├── coutinfo.sh     //输出otn帧数据脚本
+        ├── init_upmoduls   //初次运行初始化脚本
+        ├── ioctl_cout
+        ├── ioctl_cout.c
+        ├── net_module
+        ├── out1.txt
+        ├── out.txt
+        ├── reinitmoduls.sh  //初始化脚本
+        └── stop_otn    //停止控制脚本
+ }}}
+== 上行说明 ==
+代码及脚本在demo_upstreamv7.2.tar.gz中
+ # 解压到～/demo_upstream目录下
+   - `mkdir ~/demo_upstream`
+   - `tar -xvzf demo_upstreamv7.2.tar.gz -C ~/demo_upstream`
+ # 执行初始化脚本
+   - 进入脚本所在目录`cd ~/demo_upstream/shell`
+   - `sudo ./init_upmoduls` (如脚本无法执行则运行`chmod +x init_upmoduls`再运行)
+   - `exit`
+   - 重新初始化下行系统`sudo ./reinitmoduls.sh`(如脚本无法执行则运行`chmod +x reinitmoduls.sh`再运行)
+ # 运行Host程序
+   - 进入程序所在目录`cd ~/demo_upstream/upstream`
+   - 运行`sudo ./rs_otn`
+ # 如要停止运行则运行～/demo_upstream/shll目录下的`sudo ./stop_otn`
+ # 如要再次运行请
+   - 先执行~/demo_upstream/shll目录下的`sudo ./reinitmoduls`脚本
+   - 再执行~/demo_upstream/upstream目录下的`sudo ./rs_otn`
+ # 如要查看帧数据则运行～/demo_upstream/shll目录下的`sudo ./coutinfo.sh`
+----
+==== 上行子系统源码及脚本目录树 ====
+ {{{
+    ├── gfp_up  // GFP映射模块文件夹
+    │   ├── debug_fs.h
+    │   ├── gfp_up.c
+    │   ├── gfp_up.h
+    │   ├── gfp_up.ko   //GFP模块
+    │   ├── gfp_up.mod.c
+    │   ├── gfp_up.mod.o
+    │   ├── gfp_up.o
+    │   ├── Makefile
+    │   ├── modules.order
+    │   └── Module.symvers
+    ├── otn_card_dfs //光卡DMA控制模块文件夹
+    │   ├── Makefile
+    │   ├── modules.order
+    │   ├── Module.symvers
+    │   ├── otn_card.c
+    │   ├── otn_card.h
+    │   ├── otn_card.ko // 光卡模块
+    │   ├── otn_card.mod.c
+    │   ├── otn_card.mod.o
+    │   └── otn_card.o
+    ├── readme.txt //版本说明文档
+    ├── shell   //shell脚本文件夹
+    │   ├── coutinfo.sh     //输出otn帧数据脚本
+    │   ├── init_upmoduls   //初次运行初始化脚本
+    │   ├── ioctl_cout
+    │   ├── ioctl_cout.c
+    │   ├── net_module
+    │   ├── out.txt
+    │   ├── reinitmoduls.sh   //初始化脚本
+    │   └── stop_otn        //停止运行
+    └── upstream    // Host及主控程序文件夹
+        ├── cout.sh
+        ├── debug_fs.h
+        ├── host_mctl.c
+        ├── Makefile
+        ├── modules.order
+        ├── Module.symvers
+        ├── otn_main_ctl_up.c
+        ├── otn_main_ctl_up.ko  //主控模块
+        ├── otn_main_ctl_up.mod.c
+        ├── otn_main_ctl_up.mod.o
+        ├── otn_main_ctl_up.o
+        ├── out.txt
+        ├── rs_otn  // Host程序
+        ├── rs_otn.cpp
+        ├── rs_otn_Kernel.cl
+        └── rs_otn.o
+}}}

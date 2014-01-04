@@ -1,0 +1,55 @@
+ = Linux下Git使用 =
+%toc 目录
+== 安装 ==
+Linux下安装git很简单，一条命令：
+`sudo apt-get install git`
+安装好后可以查看版本信息
+输入命令：`git --version`,我的显示：
+`git version 1.8.1.2`
+== 创建版本库 ==
+进入要创建版本库的项目所在的顶级目录，输入：
+`git init`
+我的显示：`Initialized empty Git repository in /home/zcq/mysite/wiki/.git/`
+瞬间Git就把仓库建好了，而且告诉你是一个空的仓库（empty Git repository），当前目录下多了一个.git的目录，这个目录是Git来跟踪管理版本库的
+== 添加文件 ==
+用命令`git add`来添加文件到版本库的索引。
+这里添加目录下所有文件`git add ./*`
+用命令`git commit`告诉Git，把文件提交到仓库,并创建提交记录。
+这里用`git commit -m "add files"`
+但这里提示：
+{{{
+ *** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: unable to auto-detect email address
+    }}}
+按照提示要求我们设置两个全局变量值。
+== 设置Git ==
+命令 `git config --global user.email "***@***"`设置用户邮箱
+命令 `git config --global user.name "***"` 设置用户姓名
+我们还可以设置在命令行终端中使用不同颜色显示不同类型的内容,将"color.ui"设置为"auto"或"always"
+`git config --global color.ui auto`
+用下列命令可以检查全局变量设置是否成功：
+`git config --global --list`
+设置完之后，再执行上面的添加文件将没问题
+
+命令`git status`会显示工作目录树的状态，即当前的视图状态
+{{{
+# On branch master
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	.git.wiki.swp
+#	".youcompleteme\346\217\222\344\273\266\345\256\211\350\243\205.wiki.swp"
+#	git.wiki
+}}}
+上面的输出表面Git监测到了修改，并将修改了的文件用红色标志出来
+
+

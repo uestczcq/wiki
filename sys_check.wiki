@@ -1,0 +1,32 @@
+
+参考[[http://bbs.chinaunix.net/thread-1946913-1-1.html| Linux下实现劫持系统调用的总结]]
+将CR0的WP（第十六位）位清0
+
+unsigned int clear_and_return_cr0(void)
+{
+    unsigned int cr0 = 0;
+    unsigned int ret;
+
+    asm volatile ("movl %%cr0, %%eax"
+              : "=a"(cr0)
+              );
+    ret = cr0;
+
+    /* clear the 16 bit of CR0, a.k.a WP bit */
+    cr0 &= 0xfffeffff;
+
+    asm volatile ("movl %%eax, %%cr0"
+              :
+              : "a"(cr0)
+              );
+    return ret;
+}
+
+// 恢复cr0值
+void setback_cr0(unsigned int val)
+{
+    asm volatile ("movl %%eax, %%cr0"
+              :
+              : "a"(val)
+              );
+}

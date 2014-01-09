@@ -19,6 +19,20 @@ YouCompleteMe要求Vim版本7.3.584+,前面已经介绍了编译安装Vim7.4方�
 `mv cfe-3.3.src/ llvm-3.3.src/tools/clang/`
 `mv clang-tools-extra-3.3.src/ llvm-3.3.src/tools/clang/extra/`
 `mv compiler-rt-3.3.src/ llvm-3.3.src/projects/compiler-rt/`
+下载最新的LLVM、clang 及辅助库源码可用:
+    {{{
+        cd ~/llvm-clang
+        svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
+        cd llvm/tools
+        svn co http://llvm.org/svn/llvm-project/cfe/trunk clang
+        cd ../..
+        cd llvm/tools/clang/tools
+        svn co http://llvm.org/svn/llvm-project/clang-tools-extra/trunk extra
+        cd ../../../..
+        cd llvm/projects
+        svn co http://llvm.org/svn/llvm-project/compiler-rt/trunk compiler-rt
+        cd ..
+    }}}
 返回~/llvm-clang目录，并新建一个目录llvm-build专门用于编译llvm-clang，使得不污染源码。
 `mkdir llvm-build`
 `cd llvm-build/`
@@ -28,6 +42,57 @@ YouCompleteMe要求Vim版本7.3.584+,前面已经介绍了编译安装Vim7.4方�
 `sudo make install`进行安装
 如要卸载则在该目录下输入 `sudo make uninstall`
 安装好后，输入 `clang -v`查看版本信息：
+== 安装clang标准库 ==
+clang 的标准库————libc++(接口层)和 libc++abi(实现层)需要安装头文件和动态链接库(*.so)。
+* 安装libc++
+    {{{
+        cd ~/llvm-clang
+        svn co http://llvm.org/svn/llvm-project/libcxx/trunk libcxx
+        cd libcxx/lib
+        ./buildit
+    }}}
+头文件已经生成到 `~/llvm-clang/libcxx/include/`,要让 clang 找到必须复制到
+`/usr/include/c++/v1/`
+`cp -r ~/llvm-clang/libcxx/include/ /usr/include/c++/v1/`
+*.so 文件已生成 ~/llvm-clang/libcxx/lib/libc++.so.1.0,要让 clang 访问必须复
+制到 /usr/lib/,并创建软链接
+    {{{
+    ln -s ~/llvm-clang/libcxx/lib/libc++.so.1.0 ~/llvm-clang/libcxx/lib/libc++.so.1
+    ln -s ~/llvm-clang/libcxx/lib/libc++.so.1.0 ~/llvm-clang/libcxx/lib/libc++.so
+    cp ~/dllvm-clang/libcxx/lib/libc++.so* /usr/lib/
+    }}}
+    类似,源码安装 libc++abi 的头文件和动态链接库:
+    {{{
+    cd  ~/llvm-clang/
+    svn co http://llvm.org/svn/llvm-project/libcxxabi/trunk libcxxabi
+    cd libcxxabi/lib
+    ./buildit
+    }}}
+头文件已经生成到 `~/llvm-clang/libcxxabi/include/`,要让 clang 找到必须复制到
+`/usr/include/c++/v1/`
+`cp -r ~/llvm-clang/libcxxabi/include/ /usr/include/c++/v1/`
+*.so 文件已生成 `~/llvm-clang/libcxx/lib/libc++abi.so.1.0`,要让 clang 访问必
+须复制到 `/usr/lib/`,并创建软链接
+`ln -s ~/llvm-clang/libcxxabi/lib/libc++abi.so.1.0 ~/llvm-clang/libcxxabi/lib/libc++abi.so.1`
+`ln -s ~/llvm-clang/libcxxabi/lib/libc++abi.so.1.0 ~/llvm-clang/libcxxabi/lib/libc++abi.so`
+`cp ~/llvm-clang/libcxxabi/lib/libc++abi.so* /usr/lib/`
+后续可以通过如下选项进行代码编译:
+`clang++ -std=c++11 -stdlib=libc++ -Werror -Weverything -Wno-disabled-macro- expansion -Wno-float-equal -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno- global-constructors -Wno-exit-time-destructors -Wno-missing-prototypes -Wno-padded -lc++ -lc++abi main.cpp`
+参数说明：
+* -std=c++11:使用 C++11 新特性;
+* -stdlib=libc++:指定使用 clang 的标准库头文件 /usr/include/c++/v1/;
+* -Werror:将所有编译警告视为编译错误;
+* -Weverything:打开所有编译警告选项。在 GCC 中,无法通过单个选项打开所有 编译警告,必须繁琐的同时指定 -Wall、-Wextra、以及大量分散的其他选项,为此clang 新增了 -Weverything。当然,有些警告意义不大,完全可忽略,如下;
+* -Wno-disabled-macro-expansion:禁止使用宏表达式,忽略此警告;
+* -Wno-float-equal:浮点类型不应使用 != 和 == 运算符,忽略此警告;
+* -Wno-c++98-compat、-Wno-c++98-compat-pedantic:采用 C++11 新特性的代 码无法兼容 C++98,忽略此警告;
+* -Wno-global-constructors:在 main() 之前存在执行的代码,忽略此警告;
+* -Wno-exit-time-destructors:在 main() 之后存在执行的代码,忽略此警告;
+* -Wno-missing-prototypes:虽有函数定义但缺失函数原型,忽略此警告;
+* -Wno-padded:结构体大小应为 4 字节整数倍,忽略此警告(编译器自动调整对齐 边界);
+* -lc++:指定链接 /usr/lib/libc++.so 标准库;
+* -lc++abi:指定链接 /usr/lib/libc++abi.so 标准库。注意:这两个选项非常重 要,缺失将导致链接失败!
+这些参数在YouCompleteMe的配置文件.ycm_extra_conf.py的flags中设置
 == 安装配置YouCompleteMe ==
 # 下载源码。使用vundle搞定，在vimrc文件中加入 `Bundle 'Valloric/YouCompleteMe'`
 # 执行命令：
@@ -35,7 +100,7 @@ YouCompleteMe要求Vim版本7.3.584+,前面已经介绍了编译安装Vim7.4方�
     $ cd ~
     $ mkdir ~/ycm_build
     $ cd ~/ycm_build
-    $ cmake -G "Unix Makefiles" -DEXTERNAL_LIBCLANG_PATH=CLANG_INSTALL_PATH/libclang.so . ~/.vim/bundle/YouCompleteMe/cpp
+    $ cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBclang=ON -DEXTERNAL_LIBCLANG_PATH=CLANG_INSTALL_PATH/libclang.so . ~/.vim/bundle/YouCompleteMe/cpp
   }}}
 # 在YouCompleteMe中生成libclang.so和ycm_core.so文件
     执行 `make ycm_core`，这样将在~/.vim/bundle/YouCompleteMe/python/目录下自动生成两个文件(libclang.so和ycm_core.so)

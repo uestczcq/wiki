@@ -1,0 +1,4 @@
+== 搭建工作环境 ==
+# 安装虚拟机
+    Ubuntu 下安装虚拟机Bochs很简单，命令行`sudo apt-get install vgabios bochs bochs-x bximage`搞定。
+

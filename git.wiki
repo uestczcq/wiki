@@ -55,5 +55,45 @@ fatal: unable to auto-detect email address
 git diff顾名思义就是查看difference，显示的格式正是Unix通用的diff格式
 `git log -1`可以快速浏览提交留言,这里的数字用来限制git log 命令输出的提交条目的个数,加上 --pretty=oneline参数每条记录显示(版本号和提交留言)一行。
 == 添加新的远程版本库 ==
+Git提供了三种与远程版本库通信的协议：
+- SSH
+- git
+- HTTP/HTTPS
+# 使用ssh:
+  * 创建SSH Key
+  在～/.ssh/目录下有没有id_rsa和id_rsa.pub文件没有则创建
+  `ssh-keygen -t rsa -C "youremail@example.com"`
+  创建后在~/.ssh里文件id_rsa.pub是公钥,id_rsa是私钥
+  * 向GitHub添加ssh key
+    登陆GitHub，打开“Account settings”，“SSH Keys”页面,点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容
+  * 创建远程库用户名
+    `git remote add origin git@github.com:test/test.git`
+  * 把本地库所有内容push到远程库
+    `git push -u origin master`
+# 使用HTTP/HTTPS
+  * 根据GitHub上提示，添加用户并push即可
+`git remote add origin https://github.com/test/test.git`
+`git push -u origin master`
+== 版本回退 ==
+Git必须知道当前版本是哪个版本，在Git中，用HEAD表示当前版本，上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100
+`git reset`命令回退到以前的版本
+`git reset --hard HEAD^`回退到前一个版本
+如果又想找回回退前的版本，只需`git reset --hard 版本号`
+例如`git reset --hard d846`这里版本号只需输入前几位即可
+Git提供了一个命令`git reflog`用来记录你的每一次命令,可用该命令来查看历史版本号
+例如：
+{{{
+$ git reflog
+d846459 HEAD@{0}: reset: moving to d846
+87458f0 HEAD@{1}: reset: moving to HEAD^
+d846459 HEAD@{2}: commit: delete some lines
+87458f0 HEAD@{3}: commit: ddd
+f4fb95e HEAD@{4}: commit (initial): add test.c
+}}}
+== 工作区和暂存区 ==
+把文件往Git版本库里添加的时候，是分两步执行的：
+# 是用“git add”把文件添加进去，实际上就是把文件修改添加到暂存区；
+# 是用“git commit”提交更改，实际上就是把暂存区的所有内容提交到当前分支。
+可以简单理解为，git add命令实际上就是把要提交的所有修改通通放到暂存区（Stage），然后，执行git commit就可以一次性把暂存区的所有修改提交到分支。
 
 

@@ -97,7 +97,10 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
     }}}
 == 5、标签导航 ==
 [[https://github.com/majutsushi/tagbar| majutsushi/tagbar]]
-
+- tagbar按作用域归类不同的标签。按名字空间 n_foo、类 Foo 进行归类,在内部有声明、有定义;
+- 显示标签类型。名字空间、类、函数等等;
+- 显示完整函数原型;
+- 图形化显示共有成员(+)、私有成员(-)、保护成员(#);
 配置如下：
 {{{
 "标签导航，纬度和taglist不同
@@ -144,6 +147,7 @@ map <C-S-Tab> :MBEbp<cr>
     }}}
 == 8、文件搜索 ==
 [[https://github.com/kien/ctrlp.vim| kien/ctrlp.vim]]
+CtrlP会沿着vim打开的目录一直向上查找类似.git/.svn等这样的项目管理的目录，如果找到则将这个作为项目的根目录
 vimrc中配置如下：
 {{{
 "for file search ctrlp, 文件搜索
@@ -364,6 +368,26 @@ let blog.auto_export       = 1
 
 let g:vimwiki_list = [blog]
     }}}
-----
+== 24、多光标批量操作 ==
+[[https://github.com/terryma/vim-multiple-cursors| terryma/vim-multiple-cursors]]
+
+vimrc中配置如下：
+{{{
+"for mutil cursor
+Bundle 'terryma/vim-multiple-cursors'
+let g:multi_cursor_use_default_mapping=0
+" Default mapping
+let g:multi_cursor_next_key='<C-m>'
+let g:multi_cursor_prev_key='<C-p>'
+let g:multi_cursor_skip_key='<C-x>'
+let g:multi_cursor_quit_key='<Esc>'
+}}}
+== 25、python语法高亮 ==
+{{{
+"python syntax highlight
+Bundle 'hdima/python-syntax'
+let python_highlight_all = 1
+}}}
+---
 待验证
 g内容查找,rep.vim（https://github.com/yegappan/grep）的插件满足我的需求

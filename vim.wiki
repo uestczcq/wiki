@@ -11,6 +11,7 @@ if [ ! -e $CURRENT_DIR/vundle ]; then
     git clone https://github.com/gmarik/vundle.git $CURRENT_DIR/bundle/vundle
 fi
 sudo apt-get install ctags
+sudo apt-get install wmctrl
 cd ~/.vim/bundle/YouCompleteMe/
 bash -x install.sh --clang-completer
 

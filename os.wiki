@@ -1,4 +1,11 @@
 == 搭建工作环境 ==
 # 安装虚拟机
-    Ubuntu 下安装虚拟机Bochs很简单，命令行`sudo apt-get install vgabios bochs bochs-x bximage`搞定。
+    Ubuntu 下安装虚拟机Bochs很简单，命令行`sudo apt-get install vgabios bochs bochs-x `搞定。
+    安装bximage,用于生成磁盘映像（虚拟软盘和虚拟硬盘）`sudo apt-get install bximage`
+运行bochs出现错误：
+bochs-bin: symbol lookup error: /usr/lib/bochs/plugins/libbx_x.so: undefined symbol: XpmCreatePixmapFromData
+解决方案：
+ `sudo apt-get install bochs-sdl`
+配置文件bochsrc里面加一句 display_library: sdl
+
 

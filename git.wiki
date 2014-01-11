@@ -74,6 +74,9 @@ Git提供了三种与远程版本库通信的协议：
   * 根据GitHub上提示，添加用户并push即可
 `git remote add origin https://github.com/test/test.git`
 `git push -u origin master`
+
+`git pull` 将github(远程)的git档案与本地的同步(即更新本地端的repo)
+`git push`  将本地的git档案与github(远程)上的同步
 == 版本回退 ==
 Git必须知道当前版本是哪个版本，在Git中，用HEAD表示当前版本，上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100
 `git reset`命令回退到以前的版本
@@ -95,5 +98,12 @@ f4fb95e HEAD@{4}: commit (initial): add test.c
 # 是用“git add”把文件添加进去，实际上就是把文件修改添加到暂存区；
 # 是用“git commit”提交更改，实际上就是把暂存区的所有内容提交到当前分支。
 可以简单理解为，git add命令实际上就是把要提交的所有修改通通放到暂存区（Stage），然后，执行git commit就可以一次性把暂存区的所有修改提交到分支。
+
+= 资料 =
+git操作资料来源于网络
+
+[[http://my.oschina.net/shootercn/blog/13476| 使用git管理github项目]],命令综合
+
+[[http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000|廖雪峰git教程]]
 
 

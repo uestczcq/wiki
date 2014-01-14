@@ -39,6 +39,7 @@ fatal: unable to auto-detect email address
 用下列命令可以检查全局变量设置是否成功：
 `git config --global --list`
 设置完之后，再执行上面的添加文件将没问题
+git配置文件为~/.gitconfig
 
 命令`git status`会显示工作目录树的状态，即当前的视图状态
 {{{
@@ -77,6 +78,9 @@ Git提供了三种与远程版本库通信的协议：
 
 `git pull` 将github(远程)的git档案与本地的同步(即更新本地端的repo)
 `git push`  将本地的git档案与github(远程)上的同步
+
+
+`git clone 远程版本` 用于克隆远程版本
 == 版本回退 ==
 Git必须知道当前版本是哪个版本，在Git中，用HEAD表示当前版本，上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100
 `git reset`命令回退到以前的版本
@@ -93,12 +97,82 @@ d846459 HEAD@{2}: commit: delete some lines
 87458f0 HEAD@{3}: commit: ddd
 f4fb95e HEAD@{4}: commit (initial): add test.c
 }}}
+== 文件对比 ==
+`git diff`命令可用于查看不同版本间文件对比，显示的格式正是Unix通用的diff格式
+`git diff HEAD -- file`命令可以查看工作区和版本库里面最新版本的区别
 == 工作区和暂存区 ==
 把文件往Git版本库里添加的时候，是分两步执行的：
 # 是用“git add”把文件添加进去，实际上就是把文件修改添加到暂存区；
 # 是用“git commit”提交更改，实际上就是把暂存区的所有内容提交到当前分支。
 可以简单理解为，git add命令实际上就是把要提交的所有修改通通放到暂存区（Stage），然后，执行git commit就可以一次性把暂存区的所有修改提交到分支。
+== 撤销修改 ==
+`git checkout -- file`可以丢弃工作区的修改,将stage中内容还回工作区。
+例如执行：
 
+  命令git checkout -- readme.txt意思就是，把readme.txt文件在工作区的修改全部撤销，这里有两种情况：
+
+  一种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+
+  一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+例如文件：readme.txt中在添加了一行内容：
+add a new line and added to stage.
+后执行git add readme.txt
+然后再添加一行内容：
+add a new line but not add to stage.
+这时执行:git checkout -- readme.txt
+这时工作区readme.txt的内容将回退到git add 后的状态,即：添加了内容 add a new line and added to stage.
+
+git reset HEAD file可以把暂存区的修改撤销掉（unstage）。
+
+如果这时再执行git reset HEAD readme.txt,这时暂存区的内容将被撤销,工作区内容将不发生变化
+== 删除文件 ==
+git rm用于删除一个文件。
+删除过程,以文件readme.txt为例：
+`rm readme.txt`
+{{{
+$ git status
+# On branch master
+# Changes not staged for commit:
+#   (use "git add/rm <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#   deleted:    readme.txt
+#
+no changes added to commit (use "git add" and/or "git commit -a")
+    }}}
+如果确实要删除则：
+`$ git rm readme.txt`
+rm 'test.txt'
+`$ git commit -m "remove readme.txt"`
+[master d17efd8] remove test.txt
+
+ 1 file changed, 1 deletion(-)
+
+ delete mode 100644 test.txt
+
+如果是误删则恢复：
+`$ git checkout -- readme.txt`
+这里的git checkout其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。
+== 分支管理 ==
+创建分支：
+`git checkout -b branch_name`
+git checkout命令加上-b参数表示创建并切换，相当于以下两条命令：
+`git branch branch_name`    创建分支
+`git checkout branch_name`  切换到分支branch_name
+`git branch`命令查看当前分支。 git branch命令会列出所有分支，当前分支前面会标一个*号。
+`git merge branch_name`命令用于合并指定分支到当前分支。
+合并分支时，如有冲突,Git用<<<<<<<，=======，>>>>>>>标记出不同分支的内容。
+
+`git branch -d branch_name`  用于删除分支
+
+`git log --graph --pretty=oneline --abbrev-commit`查看log,用git log --graph命令可以看到分支合并图
+
+合并分支时，如果可能，Git会用“Fast forward”模式，但这种模式下，删除分支后，会丢掉分支信息,--no-ff的merge方式，强制禁用“Fast forward”模式，Git就会在merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息。
+
+分支管理策略：
+* 首先，master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面开发；
+* 开发都在dev分支上，也就是说，dev分支是不稳定的，到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本
+* 每个开发人员都在各自的dev分支上进行开发，每个人都有自己的分支，时不时地往dev分支上合并就可以了。
 = 资料 =
 git操作资料来源于网络
 

@@ -1,0 +1,59 @@
+ == Python入门 ==
+%toc 目录
+=== 参考资料 ===
+编码风格:http://google-styleguide.googlecode.com/svn/trunk/pyguide.html http://www.bsdmap.com/articles/zh-google-python-style-guide/
+=== 为什么学Python ===
+一个程序员至少得会一门脚本语言，自己有个什么想法或算法要实现其原型或进行验证，使用脚本语言来实现将比C/C++更节约时间，能快速实现并验证也能提升自己编程的积极性，并沉浸在解决问题的快乐之中。本人目前只会shell脚本。开始也在选择到底是学习那门脚本语言好呢,perl?ruby?还是python呢？其实不用纠结，它们各有优缺点，但只要学好一门将受用无穷。记得以前看过的Eric S. Raymond写的《黑客白皮书》中推崇从python开始学，不要因为鞋里的一颗沙子而放弃旅程，不管那么多了，那就它了。现在教研室一个Linux内核相关项目结了，有时间开始新的学习，那就义不容辞开始一段轻松快乐的学习旅程把。。。
+    Life is short, use Python!
+=== 安装Python ===
+Ubuntu下面默认是安装了Python的，`python -V`可以查看版本信息，我的是Python 2.7.4
+
+如果没有可以：
+`sudo apt-get install python`
+
+== Hello World ==
+老惯例,首先Hello World.
+- 使用交互模式
+在终端输入$python,启动解释器
+    >>>print 'Hello World'
+回车，其中>>>是你键入Python语句的提示符,要退出Python提示符,可以Ctrl+d,或者输入exit()
+- 使用程序模式
+编写脚本源文件。用文本编辑器写一个.py结尾的文件，$gvim hello.py
+输入内容
+{{{
+#!/usr/bin/env python
+# encoding: utf-8
+
+print 'hello world'
+    }}}
+执行`python hello.py`
+- 可执行的Python程序
+ `chmod +x hello.py` #变成可执行文件
+ `./hello.py`
+== 获取帮助 ==
+在交互模式下函数help()获取帮助
+>>>`help(str)`  将显示str类的帮助信息，q推出
+== 基本数据类型 ==
+Python的变量不需要声明
+{{{
+>>> a = 10
+>>> print a
+10
+>>> print type(a)
+<type 'int'>
+    }}}
+回收变量名:如果你想让a存储不同的数据，你不需要删除原有变量就可以直接赋值
+{{{
+>>> a = 1.1
+>>> print a,type(a)
+1.1 <type 'float'>
+}}}
+* python的基本数据类型
+ - a=10         # int 整数
+ - a=1.3        # float 浮点数
+ - a=True       # 真值 (True/False)
+ - a='Hello!'   # 字符串(也可以用双引号"),所有的空白，即空格和制表符都照原样保留
+ - a='''a
+     b'''       #利用三引号字符串（也可以是三个双引号"""），你可以指示一个多行的字符串。你可以在三引号中自由的使用单引号和双引号
+=== 序列 ===
+

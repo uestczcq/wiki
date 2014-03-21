@@ -2,6 +2,7 @@
 %toc 目录
 === 参考资料 ===
 编码风格:http://google-styleguide.googlecode.com/svn/trunk/pyguide.html http://www.bsdmap.com/articles/zh-google-python-style-guide/
+[[http://docs.python.org/| 官方文档]]
 === 为什么学Python ===
 一个程序员至少得会一门脚本语言，自己有个什么想法或算法要实现其原型或进行验证，使用脚本语言来实现将比C/C++更节约时间，能快速实现并验证也能提升自己编程的积极性，并沉浸在解决问题的快乐之中。本人目前只会shell脚本。开始也在选择到底是学习那门脚本语言好呢,perl?ruby?还是python呢？其实不用纠结，它们各有优缺点，但只要学好一门将受用无穷。记得以前看过的Eric S. Raymond写的《黑客白皮书》中推崇从python开始学，不要因为鞋里的一颗沙子而放弃旅程，不管那么多了，那就它了。现在教研室一个Linux内核相关项目结了，有时间开始新的学习，那就义不容辞开始一段轻松快乐的学习旅程把。。。
     Life is short, use Python!
@@ -329,6 +330,8 @@ f = open(文件名，模式)
 * 表推导(list comprehension)
 === 异常处理 ===
 所有异常都从基类Exception继承，而且都在exceptions模块中定义。一旦引发而且没有捕捉SystemExit异常，程序执行就会终止。如果交互式会话遇到一个未被捕捉的SystemExit异常，会话就会终止。
+
+使用except子句需要注意的事情，就是多个except子句截获异常时，如果各个异常类之间具有继承关系，则子类应该写在前面，否则父类将会直接截获子类异常。放在后面的子类异常也就不会执行到了。
 {{{
 try:
     ...

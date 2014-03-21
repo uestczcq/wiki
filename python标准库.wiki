@@ -1,4 +1,34 @@
  = Python标准库 =
 %toc 目录
 === 正则表达式 (re包) ===
+`m = re.search(pattern, string)`  # 搜索整个字符串，直到发现符合的子字符串。
+`m = re.match(pattern, string)`   # 从头开始检查字符串是否符合正则表达式。必须从字符串的第一个字符开始就相符。
+对于返回的m, 我们使用`m.group()来`调用结果
+`str = re.sub(pattern, replacement, string)` # 在string中利用正则变换pattern进行搜索，对于搜索到的字符串，用另一字符串replacement替换。返回替换后的字符串。
+=== 时间与日期（time、datetime包） ===
+time包基于C语言的库函数(library functions)
+time.time() # wall clock time, unit: second
+time.clock() # processor clock time, unit: second
+time.sleep(num) # 休眠num 秒
+time包还定义了struct_time对象。
 
+datetime包是基于time包的一个高级包。
+=== 路径与文件 (os.path包, glob包) ===
+os.path包主要是处理路径字符串
+
+os.path.basename(path)    # 查询路径中包含的文件名
+os.path.dirname(path)     # 查询路径中包含的目录
+info = os.path.split(path)       # 将路径分割成文件名和目录两个部分，放在一个表中返回
+path2 = os.path.join('/', 'home', 'vamei', 'doc', 'file1.txt')  # 使用目录名和文件名构成一个路径字符串
+p_list = [path, path2]
+os.path.commonprefix(p_list)    # 查询多个路径的共同部分
+os.path.normpath(path)   # 去除路径path中的冗余。比如'/home/usr/../.'被转化为'/home'
+os.path还可以查询文件的相关信息(metadata)。文件的相关信息不存储在文件内部，而是由操作系统维护的
+os.path.exists(path)    # 查询文件是否存在
+os.path.getsize(path)   # 查询文件大小
+os.path.getatime(path)  # 查询文件上一次读取的时间
+os.path.getmtime(path)  # 查询文件上一次修改的时间
+os.path.isfile(path)    # 路径是否指向常规文件
+os.path.isdir(path)     # 路径是否指向目录文件
+=== 件管理 (部分os包，shutil包) ===
+=== 存储对象 (pickle包，cPickle包) ===

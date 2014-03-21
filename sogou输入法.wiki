@@ -1,4 +1,4 @@
-= Linux安装搜狗拼音输入法-sogoupinyin =
+ = Linux安装搜狗拼音输入法-sogoupinyin =
 %toc 目录
 在网上查资料安装好了搜狗输入法，将方法记录如下：
 == 一、下载所需安装包 ==
@@ -43,31 +43,56 @@
 在http://packages.linuxdeepin.com/deepin/pool/main/f/fcitx-sogoupinyin-release/) 下载fcitx-sogoupinyin_0.0.1-2_i386.deb
 == 二、卸载原有输入法 ==
 Ubuntu 默认是安装了ibus.所以删除它
+
 `sudo apt-get remove ibus`
+
 对于已经安装老版本的fcitx,删掉再装.
+
 `sudo apt-get remove fcitx*`
+
 可以查看你的软件是否已经卸载了，如果你没有安装这步就不需要了
+
 `sudo dpkg --get-selections | grep fcitx`
+
 如果出现
+
 `Reading package lists... Done`
+
 `Building dependency tree`
+
 `Reading state information... Done`
+
 `Unable to locate package ×××.deb` 
+
 `Couldn't find any package by regex ×××.deb`
+
 则试试死否用dpkg deb包安装的
+
 `dpkg -l | grep 'fcitx'`
+
 “上面命令显示tcl包是否安装正确，其中"ii”表示“installed ok installed”
 并依次输入命令dpkg -r fcitx名进行卸载
-例如：`sudo dpkg -r fcitx fcitx-bin fcitx-config-common fcitx-config-gtk fcitx-data fcitx-dbg fcitx-frontend-all fcitx-frontend-gtk2 fcitx-frontend-gtk3 fcitx-frontend-qt4 fcitx-libs fcitx-libs-dev fcitx-libs-gclient fcitx-libs-qt fcitx-module-dbus fcitx-module-kimpanel fcitx-module-lua fcitx-module-quickphrase-editor fcitx-modules fcitx-module-x11 fcitx-pinyin fcitx-qw fcitx-skin-sogou fcitx-sogoupinyin fcitx-table fcitx-table-all fcitx-table-bingchan fcitx-table-cangjie fcitx-table-dianbaoma fcitx-table-erbi fcitx-table-wanfeng fcitx-table-wbpy fcitx-table-wubi fcitx-table-ziranma fcitx-tools fcitx-ui-classic gir1.2-fcitx-1.0 `
+
+例如：
+
+`sudo dpkg -r fcitx fcitx-bin fcitx-config-common fcitx-config-gtk fcitx-data fcitx-dbg fcitx-frontend-all fcitx-frontend-gtk2 fcitx-frontend-gtk3 fcitx-frontend-qt4 fcitx-libs fcitx-libs-dev fcitx-libs-gclient fcitx-libs-qt fcitx-module-dbus fcitx-module-kimpanel fcitx-module-lua fcitx-module-quickphrase-editor fcitx-modules fcitx-module-x11 fcitx-pinyin fcitx-qw fcitx-skin-sogou fcitx-sogoupinyin fcitx-table fcitx-table-all fcitx-table-bingchan fcitx-table-cangjie fcitx-table-dianbaoma fcitx-table-erbi fcitx-table-wanfeng fcitx-table-wbpy fcitx-table-wubi fcitx-table-ziranma fcitx-tools fcitx-ui-classic gir1.2-fcitx-1.0 `
+
 现在检查软件包的状态.
+
 `dpkg -l | grep 'fcitx'`
+
 rc  fcitx                                     1:4.2.8.1-3~raring1                        all          Flexible Input Method Framework
-rc 代表 ‘removed ok config-files’. 卸载命令并没有清除配置文件. 每个已安装包的状态可在 /var/lib/dpkg/status查看
+rc 代表 ‘removed ok config-files’. 
+
+卸载命令并没有清除配置文件. 每个已安装包的状态可在 /var/lib/dpkg/status查看
 以下命令表示彻底卸载软件包（包括配置文件）.
+
 `sudo dpkg -P fcitx fcitx-bin fcitx-data fcitx-libs fcitx-libs-gclient fcitx-libs-qt fcitx-skin-sogou`
 == 三、安装 ==
 进入步骤一下载的deb包所在目录
+
 `sudo dpkg -i *.deb`
 == 四、安装配置工具 ==
 `sudo apt-get install fcitx-config-gtk`
+
 重启即可

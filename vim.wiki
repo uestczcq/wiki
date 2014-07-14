@@ -1,39 +1,67 @@
-= Vim配置及说明 =
+ = Vim配置及说明——IDE编程环境 =
 %toc 目录
+想起几年前第一次在Linux上面用vim(当时刚从Windows转到Linux下编程),第一印象就是怎么这么麻烦，界面还这么丑,各种不方便,对着`vimtutor`练习了一下午。当时满脑子怀念Window下的VS的各种方便，后来搜到吴垠的《手把手教你把Vim改装成一个IDE编程环境》,让我顿时欣喜了一番，感觉看到了曙光，又对着他的教程捣鼓折腾了几天后感觉vim好用了些，但还是不尽人意，感觉没VS方便,尤其是代码的自动补全方面，而且很多命令都要记，隔一段时间不用就忘记了。
+
+但是经过不断捣鼓折腾，现在我再也离不开vim了，在Windows下我也用vim。只有坚持使用一段时间vim，选好自己喜欢的插件，你一定会对vim爱不释手的。言归正传，下面是我的配置。
+== 1、基本及字体 ==
+对于用惯了Windows下ctrl+s一键保存的人是不是对与vim中在命令行下:w的保存方式很不习惯？
+
+在.vimrc中加入如下配置，你可以使用`\s一键保存`
+{{{
+" \s 一键保存
+func! SaveFile()
+    exec "w"
+endfunc
+map  <leader>s :call SaveFile()<CR>
+imap <leader>s <ESC>:call SaveFile()<CR>
+vmap <leader>s <ESC>:call SaveFile()<CR>
+    }}}
+
 安装字体Monaco
+
+默认字体不好看，挑个自己喜欢的，前提是你得先安装好该字体。我喜欢Monaco字体，美观，对中文支持也很好。
+
+下面是找到的安装过程，亲自验证。
 * 首先在https://github.com/cstrap/monaco-font 这个网址下载Monaco字体
 * 使用命令 unzip monaco-font-master解压压缩包
 * 切换到monaco-font-master目录中，修改脚本文件权限chmod +x install-font.sh
 * 执行脚本文件sudo ./install-font.sh
 
-if [ ! -e $CURRENT_DIR/vundle ]; then
-    echo "Installing Vundle"
-    git clone https://github.com/gmarik/vundle.git $CURRENT_DIR/bundle/vundle
-fi
-sudo apt-get install ctags
-sudo apt-get install wmctrl
-cd ~/.vim/bundle/YouCompleteMe/
-bash -x install.sh --clang-completer
 
-== 1、插件管理 ==
-[[https://github.com/gmarik/vundle| gmarik/vundle]]
-如果想要安装插件，可以去GIT，也可一去[[http://vim-scripts.org/vim/scripts.html |Vim Scripts]]查找并选好你想要的插件；
-在VIM的配置文件中写一句 Bundle plugin_name；
-执行一下Vundle的初始化命令，插件就装好了； - 升级和卸载也是同样的简单；
+== 2、插件管理 ==
+插件[ [[https://github.com/gmarik/vundle| gmarik/vundle]]]
+
+推荐等级：★★★★★
+
+vim 的各插件打包文档中通常也包含doc、plugin子目录，用户将插件打包文档中的对应子目录拷贝至.vim/目录中即可完成安装，但插件一多将混乱不堪，会出现名字冲突，卸载麻烦（有时分不清那个文件对应哪个插件，自己也不清楚到底安装了哪些插件）等问题。
+
+vundle可以帮我们解决这些问题。
+
+通过使用vundle来安装新的插件也及其方便:
+# 可以去GIT，也可以去[[http://vim-scripts.org/vim/scripts.html |Vim Scripts]]查找并选好你想要的插件。
+# 在VIM的配置文件中写一句 Bundle plugin_name；
+# 执行一下Vundle的初始化命令，插件就装好了；
+ - 升级和卸载也是同样的简单；
 Bundle 支持的格式有三种：
-第一种是一个普通的字符串，就是 vim 插件页面里左上角的插件名字，如果插件名有空格，使用 - 替换。
+
+第一种是一个普通的字符串，就是 [[http://vim-scripts.org/vim/scripts.html |vim 插件]]页面里左上角的插件名字，如果插件名有空格，使用 - 替换。
+
 第二种是github帐号/项目名。
+
 第三种就是git repository
+
 具体可查看vbundle的帮助文档。
-== 2、主题风格 ==
-一套好的配色方案绝对会影响你的编码效率,vim 内置了 10 多种配色方案供你选择,
-GUI 下,可以通过菜单(Edit -> Color Scheme)试用不同方案,字符模式下,需要你
-手工调整配置信息,再重启 vim 查看效果(csExplorer 插件,可在字符模式下不用重启即可查看效果)。不满意,
-可以在[[http://vimcolorschemetest.googlecode.com/svn/html/index-c.html| VIM Color Scheme Test - C]]这里选择自己喜欢的配色方案
+== 3、主题风格 ==
+一套好的配色方案绝对会影响你的编码效率,vim 内置了 10 多种配色方案供你选择
+
+GUI 下,可以通过菜单(Edit -> Color Scheme)试用不同方案,字符模式下,需要你手工调整配置信息,再重启 vim 查看效果(csExplorer 插件,可在字符模式下不用重启即可查看效果)。
+还不满意,可以在[[http://vimcolorschemetest.googlecode.com/svn/html/index-c.html| VIM Color Scheme Test - C]]这里选择自己喜欢的配色方案
+
 目前用得最多的是下面三种配色方案：
-* [[https://github.com/altercation/vim-colors-solarized| solarized]]
-* [[https://github.com/tomasr/molokai| molokai]]
-* [[http://www.vim.org/scripts/script.php?script_id=3139| phd]]
+* [[https://github.com/altercation/vim-colors-solarized| solarized]] 推荐等级：★★★★★
+* [[https://github.com/tomasr/molokai| molokai]]  推荐等级：★★★★★
+* [[http://www.vim.org/scripts/script.php?script_id=3139| phd]]   推荐等级：★★★★☆
+我的配置如下:
 {{{
 " 主题 solarized
 Bundle 'altercation/vim-colors-solarized'
@@ -58,9 +86,8 @@ else
 endif
     }}}
 其中，不同主题都有暗/亮色系之分，这样三种主题六种风格，久不久换一换，给你不一样的心情
-== 3、窗口设置 ==
-编辑器界面展示的
-应全是代码,不应该有工具条、菜单、滚动条浪费空间的元素,配置如下：
+== 4、窗口设置 ==
+编辑器界面展示的应全是代码,不应该有工具条、菜单、滚动条浪费空间的元素,配置如下：
 {{{
 if g:isGUI      " 使用GUI界面时的设置
     set guioptions+=c        " 使用字符提示框
@@ -82,8 +109,13 @@ endif
     map <silent> <F11> :call ToggleFullscreen()<CR>	" 全屏开/关快捷键
     autocmd VimEnter * call ToggleFullscreen()	" 启动 vim 时自动全屏
 }}}
-== 4、目录树导航 ==
-[[https://github.com/vim-scripts/The-NERD-tree| vim-scripts/The-NERD-tree]]
+== 5、目录树导航 ==
+插件:[[https://github.com/vim-scripts/The-NERD-tree| vim-scripts/The-NERD-tree]]
+
+推荐等级：★★★★★
+
+nerd-tree插件可以查看文件列表，要打开哪个文件,光标选中后回车即可在新 buffer 中打开。
+
 配置如下：
 {{{
 "目录文件导航
@@ -96,8 +128,11 @@ let g:netrw_home='~/bak'
 "close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | end
     }}}
-== 5、标签导航 ==
+== 6、标签导航 ==
 [[https://github.com/majutsushi/tagbar| majutsushi/tagbar]]
+
+推荐等级：★★★★★
+
 - tagbar按作用域归类不同的标签。按名字空间 n_foo、类 Foo 进行归类,在内部有声明、有定义;
 - 显示标签类型。名字空间、类、函数等等;
 - 显示完整函数原型;
@@ -109,8 +144,10 @@ Bundle 'majutsushi/tagbar'
 nmap <leader>tb :TagbarToggle<CR>  " \tb 打开tagbar窗口
 let g:tagbar_autofocus = 1
 }}}
-== 6、taglist ==
+== 7、taglist ==
 [[https://github.com/vim-scripts/taglist.vim| vim-scripts/taglist.vim]]
+
+推荐等级：★★★★☆
 
 在vimrc中配置如下：
 {{{
@@ -124,12 +161,17 @@ let Tlist_Use_Right_Window     = 1             " 在右侧窗口中显示
 let Tlist_File_Fold_Auto_Close = 1             " 自动折叠
 "let Tlist_Sort_Type = "name"                   " items in tags sorted by name
 }}}
-== 7、多文档编辑 ==
+== 8、多文档编辑 ==
+插件[[https://github.com/fholgado/minibufexpl.vim |fholgado/minibufexpl.vim]]
+
+推荐等级：★★★★★
+
 vim 的多文档编辑涉及三个概念：buffer、window、tab，这三个事物与我们常规理
 解意义大相径庭。vim 把加载进内存的文件叫做 buffer，buffer 不一定可见；若要
 buffer 要可见，则必须通过 window 作为载体呈现；同个看面上的多个 window 组合成
 一个 tab。vim 中每打开一个文件，vim 就对应创建一个 buffer，多个文件就有多个
 buffer，但默认你只看得到最后 buffer 对应的 window
+
 vimrc中配置如下：
 {{{
 Bundle 'fholgado/minibufexpl.vim'
@@ -146,8 +188,11 @@ let g:miniBufExplCycleArround=1
 map <C-Tab> :MBEbn<cr>
 map <C-S-Tab> :MBEbp<cr>
     }}}
-== 8、文件搜索 ==
-[[https://github.com/kien/ctrlp.vim| kien/ctrlp.vim]]
+== 9、文件搜索 ==
+插件:[[https://github.com/kien/ctrlp.vim| kien/ctrlp.vim]]
+
+推荐等级：★★★★☆
+
 CtrlP会沿着vim打开的目录一直向上查找类似.git/.svn等这样的项目管理的目录，如果找到则将这个作为项目的根目录
 vimrc中配置如下：
 {{{
@@ -171,8 +216,11 @@ let g:ctrlp_match_window_reversed=0
 let g:ctrlp_mruf_max=500
 let g:ctrlp_follow_symlinks=1
 }}}
-== 9、美化状态栏 ==
-[[https://github.com/Lokaltog/vim-powerline| Lokaltog/vim-powerline]]
+== 10、美化状态栏 ==
+插件：[[https://github.com/Lokaltog/vim-powerline| Lokaltog/vim-powerline]]
+
+推荐等级：★★★★☆
+
 状态栏增强展示,通过本插件,增强后的状态栏，不仅界面漂亮多了，而且多
 了好些辅助信息（所在函数名、文件编码格式、文件类型）。
 vimrc中配置如下：
@@ -182,8 +230,11 @@ Bundle 'Lokaltog/vim-powerline'
 "let g:Powerline_symbols = 'fancy'
 let g:Powerline_symbols = 'unicode'
 }}}
-== 10、括号匹配高亮 ==
-[[https://github.com/kien/rainbow_parentheses.vim| kien/rainbow_parentheses.vim]]
+== 11、括号匹配高亮 ==
+插件：[[https://github.com/kien/rainbow_parentheses.vim| kien/rainbow_parentheses.vim]]
+
+推荐等级：★★★★☆
+
 括号显示增强
 vimrc中配置如下：
 {{{
@@ -209,8 +260,11 @@ let g:rbpt_colorpairs = [
 let g:rbpt_max = 40
 let g:rbpt_loadcmd_toggle = 0
 }}}
-== 11、可视化缩进 ==
-[[https://github.com/nathanaelkane/vim-indent-guides| nathanaelkane/vim-indent-guides]]
+== 12、可视化缩进 ==
+插件：[[https://github.com/nathanaelkane/vim-indent-guides| nathanaelkane/vim-indent-guides]]
+
+推荐等级：★★★★☆
+
 可视化的方式能将相同缩进的代码关联起来。
 显可视化缩进,示对齐线。
 vimrc中配置如下：
@@ -221,8 +275,11 @@ let g:indent_guides_guide_size            = 1  " 指定对齐线的尺寸
 let g:indent_guides_start_level 	  = 2  " 从第二层开始可视化显示缩进
 " \ig 打开/关闭 vim-indent-guides
 }}}
-== 12、标志无效空格 ==
+== 13、标志无效空格 ==
 [[https://github.com/bronson/vim-trailing-whitespace| bronson/vim-trailing-whitespace]]
+
+推荐等级：★★★★★
+
 将代码行最后无效的空格标红
 
 vimrc中配置如下：
@@ -231,36 +288,62 @@ vimrc中配置如下：
 Bundle 'bronson/vim-trailing-whitespace'
 map <leader><space> :FixWhitespace<cr>	" \+space去掉末尾空格
     }}}
-== 13、快速移动 ==
-[[https://github.com/Lokaltog/vim-easymotion| Lokaltog/vim-easymotion]]
+== 14、快速移动 ==
+插件:[[https://github.com/Lokaltog/vim-easymotion| Lokaltog/vim-easymotion]]
+
+推荐等级：★★★★★
+
 效率提升杀手锏，跳转到光标后任意位置
+
 vimrc中配置如下：
 {{{
 "更高效的移动 // + w/f/l
 Bundle 'Lokaltog/vim-easymotion'
     }}}
-== 14、括号匹配跳转 ==
-[[https://github.com/vim-scripts/matchit.zip| vim-scripts/matchit.zip]]
+== 15、括号匹配跳转 ==
+插件：[[https://github.com/vim-scripts/matchit.zip| vim-scripts/matchit.zip]]
+
+推荐等级：★★★☆☆
+
 匹配成对的标签，在()、""、甚至HTML标签之间快速跳转,快捷键为%
 vimrc中配置如下：
 {{{
 Bundle 'vim-scripts/matchit.zip'
     }}}
-== 15、自动补全 ==
-[[https://github.com/Valloric/YouCompleteMe| Valloric/YouCompleteMe]]
-Ubuntu13.04配置YCM可参考[[http://www.cnblogs.com/csuftzzk/p/3435710.html| 这里]]
+== 16、自动补全 ==
+插件：[[https://github.com/Valloric/YouCompleteMe| Valloric/YouCompleteMe]]
 
-== 16、宏定义补全 ==
-[[https://github.com/SirVer/ultisnips| SirVer/ultisnips]]
+推荐等级：★★★★★
+
+强烈推荐
+Ubuntu13.04配置YCM可参考[[http://www.cnblogs.com/zhongcq/p/3630047.html| 这里]]
+
+== 17、宏定义补全 ==
+插件：[[https://github.com/SirVer/ultisnips| SirVer/ultisnips]]
+
+推荐等级：★★★★★
+
+配合YCM使用，双剑合璧,方便快捷，强烈推荐
+
 开发时,我经常要输入相同的代码片断,比如 if-else、switch 语句,ultisnips可以快速插入我们自定义的代码片段,实现高效补全。
 UltiSnips 预定义了几十种语言常用的代码模板,位于~/.vim/bundle/UltiSnips/UltiSnips/,UltiSnips 有一套自己的代码模板语法规则。
 vimrc中配置如下：
 {{{
-
+"快速插入代码片段
+Bundle 'SirVer/ultisnips'
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+"定义存放代码片段的文件夹 .vim/snippets下，使用自定义和默认的，将会的到全局，有冲突的会提示
+let g:UltiSnipsSnippetDirectories=["snippets", "bundle/ultisnips/UltiSnips"]
     }}}
-== 17、快速加减注释 ==
-[[https://github.com/scrooloose/nerdcommenter| scrooloose/nerdcommenter]]
-快速批量注释
+== 18、快速加减注释 ==
+插件：[[https://github.com/scrooloose/nerdcommenter| scrooloose/nerdcommenter]]
+
+推荐等级：★★★★★
+
+快速批量注释,方便好用
+
 常用操作：
 - <leader>cc，注释当前选中文本，如果选中的是整行则在每行首添加 //，如果选中
 一行的部分内容则在选中部分前后添加分别 /*、*/；
@@ -270,7 +353,7 @@ vimrc中配置如下：
 Bundle 'scrooloose/nerdcommenter'
 let NERDSpaceDelims = 1
     }}}
-== 18、快速加环绕符 ==
+== 19、快速加环绕符 ==
 [[https://github.com/tpope/vim-surround| tpope/vim-surround]]
 详情见帮助文档
 配合使用增强版命令重复 [https://github.com/tpope/vim-repeat| pope/vim-repeat ]
@@ -280,8 +363,11 @@ Bundle 'tpope/vim-surround'
 "for repeat -> enhance surround.vim, . to repeat command
 Bundle 'tpope/vim-repeat'
     }}}
-== 19、自动括号补全 ==
-[[https://github.com/Raimondi/delimitMate| Raimondi/delimitMate]]
+== 20、自动括号补全 ==
+插件：[[https://github.com/Raimondi/delimitMate| Raimondi/delimitMate]]
+
+推荐等级：★★★★☆
+
 vimrc中配置如下：
 {{{
 "自动补全单引号，双引号等
@@ -289,8 +375,11 @@ Bundle 'Raimondi/delimitMate'
 " for python docstring ",优化输入
 au FileType python let b:delimitMate_nesting_quotes = ['"']
     }}}
-== 20、代码对齐 ==
-[[https://github.com/godlygeek/tabular| godlygeek/tabular]]
+== 21、代码对齐 ==
+插件：[[https://github.com/godlygeek/tabular| godlygeek/tabular]]
+
+推荐等级：★★★★★
+
 vimrc中配置如下：
 {{{
 "for code alignment
@@ -300,10 +389,14 @@ nmap <leader>bb :Tab /=<CR>
 " \bn                 自定义对齐    [Tabular插件]
 nmap <leader>bn :Tab /
     }}}
-== 21、静态代码分析 ==
-[[https://github.com/scrooloose/syntastic| scrooloose/syntastic]]
+== 22、静态代码分析 ==
+插件：[[https://github.com/scrooloose/syntastic| scrooloose/syntastic]]
+
+推荐等级：★★★★☆
+
 syntastic是一款支持多语言的实时语法检查插件。在 syntastic 的作用下，编码中、编译前，所有语法错误都将被抓出来并
 呈现给你。
+
 vimrc中配置如下：
 {{{
 " 使用pyflakes,速度比pylint快
@@ -323,8 +416,11 @@ let g:syntastic_cpp_compiler = 'clang++'
 let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libstdc++'
 let g:syntastic_enable_balloons = 1	"whether to show balloons
     }}}
-== 22、快速跳转到TODO列表 ==
-[[https://github.com/vim-scripts/TaskList.vim| vim-scripts/TaskList.vim]]
+== 23、快速跳转到TODO列表 ==
+插件：[[https://github.com/vim-scripts/TaskList.vim| vim-scripts/TaskList.vim]]
+
+推荐等级：★★★★☆
+
 查看并快速跳转到代码中的TODO列表。重构代码时一般通读,标记修改位置,非常实用
 
 vimrc中配置如下：
@@ -333,8 +429,13 @@ Bundle 'vim-scripts/TaskList.vim'
 map <leader>td <Plug>TaskList
     }}}
 
-== 23、维基百科 ==
-vim下的维基百科
+== 24、维基百科 ==
+插件：[[https://github.com/vim-scripts/vimwiki| vim-scripts/vimwiki]]
+
+推荐等级：★★★★☆
+
+vim下的维基百科,我的博客就是用vimwiki写的。
+
 vimrc中配置如下:
 {{{
 Bundle 'vim-scripts/vimwiki'
@@ -369,8 +470,10 @@ let blog.auto_export       = 1
 
 let g:vimwiki_list = [blog]
     }}}
-== 24、多光标批量操作 ==
-[[https://github.com/terryma/vim-multiple-cursors| terryma/vim-multiple-cursors]]
+== 25、多光标批量操作 ==
+插件：[[https://github.com/terryma/vim-multiple-cursors| terryma/vim-multiple-cursors]]
+
+推荐等级：★★★☆☆
 
 vimrc中配置如下：
 {{{
@@ -383,12 +486,15 @@ let g:multi_cursor_prev_key='<C-p>'
 let g:multi_cursor_skip_key='<C-x>'
 let g:multi_cursor_quit_key='<Esc>'
 }}}
-== 25、python语法高亮 ==
+== 26、python语法高亮 ==
 {{{
 "python syntax highlight
 Bundle 'hdima/python-syntax'
 let python_highlight_all = 1
 }}}
----
-待验证
-g内容查找,rep.vim（https://github.com/yegappan/grep）的插件满足我的需求
+== 27、其他说明 ==
+在我的vimrc中使用了ctags，需要安装
+
+`sudo apt-get install ctags`
+
+推荐等级：★★★★☆

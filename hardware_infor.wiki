@@ -1,0 +1,43 @@
+ = Linux查看硬件信息（北桥芯片组、南桥、PCI接口、CPU等） =
+%toc 目录
+今天想要在Linux下查看机器上MCH(北桥)芯片，ICH(南桥)信息，在网上找方法。通过命令`lspci | grep -i host\ bridge`查看北桥芯片只能看到属于哪个系列的，例如我的是
+{{{
+    00:00.0 Host bridge: Intel Corporation 4 Series Chipset DRAM Controller (rev 03)
+}}}
+不能看到更具体信息。
+
+在网上看到可以通过`dmesg`看到，但没说具体方法。我也是通过dmesg查看到的，特此记录下来。顺便把查看PC其他硬件相关信息方法记录下。
+== 查看MCH(北桥) ==
+# lspci方法
+ `lspci | grep -i host\ bridge`(只显示是那个系列的)
+ 例如我的显示
+{{{
+  00:00.0 Host bridge: Intel Corporation 4 Series Chipset DRAM Controller (rev 03)
+}}}
+  是Intel Corporation 4系列的。
+# dmesg方法
+ 'dmesg | grep Chipset'(具体到那个芯片组)
+ 例如我的查看到
+{{{
+ [    2.679615] agpgart-intel 0000:00:00.0: Intel G41 Chipset
+ }}}
+ 显示我的北桥是G41的。
+== 查看ICH(南桥) ==
+查看命令：`lspci | grep -i interface`
+== 查看CPU ==
+`cat /proc/cpuinfo`
+== 查看pci接口设备 ==
+`lspci`
+可以查看到北桥、显卡(VGA)、声卡(Audio device)、PCI接口、USB接口及网卡(Ethenet)等
+== 查看内存 ==
+`cat /proc/meminfo`
+== 查看中断(IRQ) ==
+`cat /proc/interrupts`
+== 查看硬盘 ==
+`hdparm -i /dev/sda`
+== 查看分区情况 ==
+`df -l`
+== 可用设备的列表 ==
+`cat /proc/devices` (在内核开发用于创建字符设备或块设备时有用)
+
+
